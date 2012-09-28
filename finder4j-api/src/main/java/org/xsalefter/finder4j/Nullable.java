@@ -2,7 +2,7 @@ package org.xsalefter.finder4j;
 
 /**
  * Define how the query treat null parameter value in {@link Restriction#values}.
- * @author xsalefter
+ * @author xsalefter (xsalefter@gmail.com)
  */
 public enum Nullable {
 

@@ -10,10 +10,10 @@ public class JPAQueryBuilderSelectTest extends JPAQueryBuilderTest {
 		logger.debug("#selectWithEmptyParameter()");
 
 		addressQueryBuilder.select();
-		Assert.assertEquals(addressQueryBuilder.toString().trim(), "select address from Address address");
+		Assert.assertEquals(addressQueryBuilder.getQueryString().trim(), "select address from Address address");
 
 		cityQueryBuilder.select();
-		Assert.assertEquals(cityQueryBuilder.toString().trim(), "select city from City city");
+		Assert.assertEquals(cityQueryBuilder.getQueryString().trim(), "select city from City city");
 	}
 
 
@@ -22,12 +22,12 @@ public class JPAQueryBuilderSelectTest extends JPAQueryBuilderTest {
 		logger.debug("#selectWithDefinedParameter()");
 
 		personQueryBuilder.select("id", "name");
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString().trim();
 		String expected = "select person.id, person.name from Person person";
 		Assert.assertEquals(expected, actual);
 
 		personQueryBuilder.select("addresses");
-		actual = personQueryBuilder.toString().trim();
+		actual = personQueryBuilder.getQueryString().trim();
 		expected = "select person.addresses from Person person";
 		Assert.assertEquals(expected, actual);
 	}

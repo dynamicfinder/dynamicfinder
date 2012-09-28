@@ -16,10 +16,10 @@ class LikeComparatorRestrictionHandler extends AbstractRestrictionHandler {
 	}
 
 	@Override
-	public DTO parseRestriction(Restriction restriction) {
+	public DTO handleRestriction(Restriction restriction) {
 		Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
 		if (restrictionValues.length > 1)
-			throw new IllegalArgumentException("'" + restriction.getValues() + "' restriction cannot accept more than one values.");
+			throw new IllegalArgumentException("'" + restriction.getId() + "' restriction cannot accept more than one values.");
 
 		final StringBuilder builder = new StringBuilder();
 		final Nullable nullable = restriction.getNullable();
@@ -37,7 +37,7 @@ class LikeComparatorRestrictionHandler extends AbstractRestrictionHandler {
 				} else handleRestriction = (restrictionValue != null);
 
 				if (handleRestriction) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" like concat(").
 						append(this.prefix).
 						append(" :").append(restrictionId).
@@ -49,7 +49,7 @@ class LikeComparatorRestrictionHandler extends AbstractRestrictionHandler {
 
 			case KEEP:
 				if (restrictionValue != null) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" like concat(").
 						append(this.prefix).
 						append(" :").append(restrictionId).

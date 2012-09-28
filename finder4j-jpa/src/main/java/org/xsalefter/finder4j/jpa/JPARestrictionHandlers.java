@@ -2,7 +2,6 @@ package org.xsalefter.finder4j.jpa;
 
 import java.util.HashMap;
 
-import org.xsalefter.finder4j.RestrictionHandler;
 import org.xsalefter.finder4j.RestrictionType;
 import org.xsalefter.finder4j.jpa.handler.EqualRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.GreaterRestrictionHandler;
@@ -13,12 +12,13 @@ import org.xsalefter.finder4j.jpa.handler.LikeRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.LikeWithPostfixRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.LikeWithPrefixRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.NotEqualRestrictionHandler;
+import org.xsalefter.finder4j.spi.RestrictionHandler;
 
-public class JPARestrictionHandler extends HashMap<RestrictionType, RestrictionHandler> {
+public class JPARestrictionHandlers extends HashMap<RestrictionType, RestrictionHandler> {
 
 	private static final long serialVersionUID = 1L;
 
-	public JPARestrictionHandler() {
+	public JPARestrictionHandlers() {
 		super.put(RestrictionType.EQUAL, new EqualRestrictionHandler());
 		super.put(RestrictionType.NOT_EQUAL, new NotEqualRestrictionHandler());
 		super.put(RestrictionType.GREATER, new GreaterRestrictionHandler());

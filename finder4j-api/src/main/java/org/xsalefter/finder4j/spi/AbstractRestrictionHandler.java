@@ -1,18 +1,15 @@
 package org.xsalefter.finder4j.spi;
 
 import org.xsalefter.finder4j.Restriction;
-import org.xsalefter.finder4j.RestrictionHandler;
 
 public abstract class AbstractRestrictionHandler implements RestrictionHandler {
 
 	private String entityName;
 
 	public AbstractRestrictionHandler() {
-		this.entityName = "";
 	}
 
-	@Override
-	public void setEntityName(String entityName) {
+	public void setEntityAliasName(String entityName) {
 		this.entityName = entityName;
 	}
 
@@ -20,7 +17,7 @@ public abstract class AbstractRestrictionHandler implements RestrictionHandler {
 	 * Get entity name which is defined in {@link AbstractQueryBuilder}.
 	 * @return {@link String} entity name.
 	 */
-	protected final String getEntityName() {
+	protected final String getEntityAliasName() {
 		return this.entityName;
 	}
 

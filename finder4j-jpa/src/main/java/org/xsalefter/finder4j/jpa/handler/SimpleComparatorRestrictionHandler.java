@@ -2,9 +2,9 @@ package org.xsalefter.finder4j.jpa.handler;
 
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Restriction;
-import org.xsalefter.finder4j.RestrictionHandler;
 import org.xsalefter.finder4j.RestrictionType;
 import org.xsalefter.finder4j.spi.AbstractRestrictionHandler;
+import org.xsalefter.finder4j.spi.RestrictionHandler;
 
 /**
  * Kind of {@link RestrictionHandler} for {@link RestrictionType#EQUAL}, 
@@ -27,11 +27,11 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 	}
 
 	@Override
-	public RestrictionHandler.DTO parseRestriction(Restriction restriction) {
+	public RestrictionHandler.DTO handleRestriction(Restriction restriction) {
 		Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
-		
+
 		if (restrictionValues.length > 1)
-			throw new IllegalArgumentException("'" + restriction.getValues() + "' restriction cannot accept more than one values.");
+			throw new IllegalArgumentException("'" + restriction.getId() + "' restriction cannot accept more than one values.");
 
 		final StringBuilder builder = new StringBuilder();
 		final Nullable nullable = restriction.getNullable();
@@ -51,7 +51,7 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 				} else handleRestriction = (restrictionValue != null);
 
 				if (handleRestriction) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" ").
 						append(this.characterComparator).append(" :").
 						append(restrictionId);
@@ -60,13 +60,13 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 
 			case KEEP:
 				if (restrictionValue != null) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" ").append(this.characterComparator).
 						append(" :").append(restrictionId);
 
 					return new DTO(builder.toString(), true);
 				} else builder.
-						append(super.getEntityName()).append(".").
+						append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" is null");
 
 				return new DTO(builder.toString(), false);

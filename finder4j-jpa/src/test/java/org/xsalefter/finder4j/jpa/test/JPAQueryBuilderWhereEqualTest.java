@@ -25,15 +25,15 @@ implements RestrictionTypeQueryBuilderSpecification {
 		birth.set(1980, 5, 15);
 
 		List<Restriction> restrictions = new ArrayList<Restriction>();
-		restrictions.add(new Restriction("name", RestrictionType.EQUAL, Nullable.DISCARD, "xsalefter"));
+		restrictions.add(new Restriction("name", RestrictionType.of("equal"), Nullable.DISCARD, "xsalefter"));
 		restrictions.add(new Restriction("birthDate", RestrictionType.EQUAL, Nullable.DISCARD, birth));
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString().trim();
 		String expected = "select person from Person person where " +
-				"person.name = :name-discard-equal-and and " +
-				"person.birthDate = :birthDate-discard-equal-and";
+				"person.name = :name_discard_equal_and and " +
+				"person.birthDate = :birthDate_discard_equal_and";
 
 		Assert.assertEquals(expected, actual);
 		Assert.assertEquals(2, personQueryBuilder.getRestrictions().size());
@@ -56,10 +56,10 @@ implements RestrictionTypeQueryBuilderSpecification {
 		personQueryBuilder.select("name", "birthDate", "gender");
 		personQueryBuilder.where(restrictions);
 
-		final String actual = personQueryBuilder.toString().trim();
+		final String actual = personQueryBuilder.getQueryString().trim();
 		final String expected = "select person.name, person.birthDate, person.gender from " +
-				"Person person where person.name = :name-discard-equal-or or " + 
-				"person.birthDate = :birthDate-discard-equal-and";
+				"Person person where person.name = :name_discard_equal_or or " + 
+				"person.birthDate = :birthDate_discard_equal_and";
 
 		Assert.assertEquals(expected, actual);
 		Assert.assertEquals(2, personQueryBuilder.getRestrictions().size());
@@ -80,10 +80,10 @@ implements RestrictionTypeQueryBuilderSpecification {
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString().trim();
 		String expected = "select person from Person person where " +
 				"person.name is null or " +
-				"person.birthDate = :birthDate-keep-equal-and and " +
+				"person.birthDate = :birthDate_keep_equal_and and " +
 				"person.gender is null";
 
 		Assert.assertEquals(expected, actual);
@@ -106,11 +106,11 @@ implements RestrictionTypeQueryBuilderSpecification {
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString().trim();
 		String expected = "select person from Person person where " +
 				"person.name is null or " +
-				"person.birthDate = :birthDate-keep-equal-and and " +
-				"person.gender = :gender-keep-equal-or or " +
+				"person.birthDate = :birthDate_keep_equal_and and " +
+				"person.gender = :gender_keep_equal_or or " +
 				"person.gender is null";
 
 		Assert.assertEquals(expected, actual);
@@ -129,7 +129,7 @@ implements RestrictionTypeQueryBuilderSpecification {
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString().trim();
 		String expected = "select person from Person person";
 
 		Assert.assertEquals(expected, actual);
