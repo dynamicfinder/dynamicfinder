@@ -13,6 +13,11 @@ import org.xsalefter.finder4j.QueryBuilder;
 import org.xsalefter.finder4j.Restriction;
 import org.xsalefter.finder4j.RestrictionType;
 
+/**
+ * Provide useful methods to help implementation specifics build the query. 
+ * @author xsalefter (xsalefter@gmail.com)
+ * @see {@link RestrictionHandler}
+ */
 public abstract class AbstractQueryBuilder implements QueryBuilder {
 
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractQueryBuilder.class);
@@ -61,10 +66,24 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		return Collections.unmodifiableMap(this.restrictions);
 	}
 
+	/**
+	 * Add new restriction (<strong>not</strong> {@link Restriction} object) 
+	 * for used later in {@link #getRestrictions()}. This new restriction 
+	 * added when {@link RestrictionHandler.DTO#hasParameterizedQueryString()} 
+	 * is true.
+	 * @param key of restriction. Should be same value as parameter name 
+	 * produced by {@link QueryBuilder}.
+	 * @param value value of restriction, to binding to parameterized query 
+	 *   string.
+	 */
 	protected final void addRestriction(final String key, final Object value) {
 		this.restrictions.put(key, value);
 	}
 
+	/**
+	 * Get restriction size.
+	 * @return restriction size.
+	 */
 	protected final int getRestrictionSize() {
 		return this.restrictions.size();
 	}
@@ -98,6 +117,13 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		this.restrictionHandlers.putAll(handlers);
 	}
 
+	/**
+	 * Get {@link RestrictionHandler} for given {@link RestrictionType}.
+	 * @param restrictionType for particular {@link RestrictionHandler}.
+	 * @return {@link RestrictionHandler} instance based on given {@link RestrictionType}.
+	 * @throws NoRestrictionHandlerException if no {@link RestrictionHandler}
+	 *   found for given {@link RestrictionType}.
+	 */
 	protected final RestrictionHandler getRestrictionHandler(final RestrictionType restrictionType)
 	throws NoRestrictionHandlerException {
 		final RestrictionHandler handler = this.restrictionHandlers.get(restrictionType);
@@ -106,19 +132,38 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		return handler;
 	}
 
+	/**
+	 * Get {@link StringBuilder} that produce parameterized query string. 
+	 * @return {@link StringBuilder} instance that used to produce query string.
+	 */
 	protected final StringBuilder getQueryStringBuilder() {
 		return queryStringBuilder;
 	}
 
+	/**
+	 * Get {@link StringBuilder} that create parameterized query string for 
+	 * counting a data. 
+	 * @return {@link StringBuilder} instance that used to produce query string 
+	 * like <code>select count(entity) from Entity entity</code>.
+	 */
 	protected final StringBuilder getCountQueryStringBuilder() {
 		return countQueryStringBuilder;
 	}
 
-
+	/**
+	 * Get entity name. 
+	 * @return {@link String} entity name.
+	 */
 	public final String getEntityName() {
 		return entityName;
 	}
 
+	/**
+	 * Get entity alias name. Currently, implementation detail for this method 
+	 * is using {@link Introspector#decapitalize(String)} and pass 
+	 * {@link #getEntityName()} as parameter value.
+	 * @return {@link String} entity alias name.
+	 */
 	public final String getEntityAliasName() {
 		return entityAliasName;
 	}

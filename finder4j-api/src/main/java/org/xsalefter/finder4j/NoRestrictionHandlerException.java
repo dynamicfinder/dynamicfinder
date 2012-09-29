@@ -2,7 +2,7 @@ package org.xsalefter.finder4j;
 
 /**
  * Throws when no {@link RestrictionHandler} defined for supplied {@link RestrictionType}.
- * @author xsalefter
+ * @author xsalefter (xsalefter@gmail.com)
  */
 public final class NoRestrictionHandlerException extends RuntimeException {
 

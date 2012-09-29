@@ -10,6 +10,7 @@ import org.xsalefter.finder4j.Restriction;
  * (could be obtained by calling {@link RestrictionHandler.DTO}).
  * </p>
  * @author xsalefter (xsalefter@gmail.com)
+ * @see {@link RestrictionHandler.DTO}
  */
 public abstract class RestrictionHandler {
 
@@ -32,7 +33,7 @@ public abstract class RestrictionHandler {
 
 	/**
 	 * Data Transfer Object for {@link RestrictionHandler#parseRestriction(Restriction)}.
-	 * @author xsalefter
+	 * @author xsalefter (xsalefter@gmail.com)
 	 */
 	public static class DTO {
 		private final String restrictionString;

@@ -16,7 +16,6 @@ import java.util.Map;
  *   where(restrictions).
  *   getQueryString();
  * </pre>
- * 
  * Based on code above:
  * <ul>
  *   <li>
@@ -63,7 +62,6 @@ import java.util.Map;
  * </p>
  * 
  * @author xsalefter (xsalefter@gmail.com)
- * @see {@link RestrictionHandler}
  */
 public interface QueryBuilder {
 
@@ -138,5 +136,11 @@ public interface QueryBuilder {
 	 * @return {@link String} of parameterized query string.
 	 */
 	String getQueryString();
+
+	/**
+	 * Get parameterized query {@link String} for count the data size. Invoke 
+	 * this method should clearing buffer that handle chuck of query. 
+	 * @return {@link String} of query string for count data size.
+	 */
 	String getCountQueryString();
 }

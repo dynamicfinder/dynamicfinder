@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Define data structure for query restriction.
- * @author xsalefter
+ * @author xsalefter (xsalefter@gmail.com)
  */
 public class Restriction implements Serializable {
 
