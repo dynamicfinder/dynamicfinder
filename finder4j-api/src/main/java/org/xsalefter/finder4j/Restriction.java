@@ -5,7 +5,6 @@ import java.io.Serializable;
 /**
  * Define data structure for query restriction.
  * @author xsalefter
- * @since 0.1
  */
 public class Restriction implements Serializable {
 
@@ -39,37 +38,12 @@ public class Restriction implements Serializable {
 	/**
 	 * Create new instance of {@link Restriction}.
 	 * @param field to added as restriction. Couldn't be null.
-	 * @param restrictionType of restriction as a {@link String}. Couldn't be null.
-	 * @param values to pass to restriction.
-	 */
-	public Restriction(String field, String restrictionType, Object...values) {
-		this(field, RestrictionType.of(restrictionType), values);
-		this.logic = RestrictionLogic.AND;
-		this.id = this.generateId();
-	}
-
-	/**
-	 * Create new instance of {@link Restriction}.
-	 * @param field to added as restriction. Couldn't be null.
 	 * @param type of restriction. Couldn't be null.
 	 * @param logic of restriction.
 	 * @param values to pass to restriction.
 	 */
 	public Restriction(String field, RestrictionType type, RestrictionLogic logic, Object...values) {
 		this(field, type, values);
-		this.logic = logic;
-		this.id = this.generateId();
-	}
-
-	/**
-	 * Create new instance of {@link Restriction}.
-	 * @param field to added as restriction. Couldn't be null.
-	 * @param type of restriction. Couldn't be null.
-	 * @param logic of restriction. Couldn't be null.
-	 * @param values to pass to restriction.
-	 */
-	public Restriction(String field, String restrictionType, RestrictionLogic logic, Object...values) {
-		this(field, restrictionType, values);
 		this.logic = logic;
 		this.id = this.generateId();
 	}
@@ -139,6 +113,7 @@ public class Restriction implements Serializable {
 	}
 
 	public Object[] getValues() {
+		if (this.values == null || this.values.length == 0) return new Object[] { null };
 		return values;
 	}
 
@@ -193,7 +168,7 @@ public class Restriction implements Serializable {
 				append(this.field).append("-").
 				append(this.nullable.toString().toLowerCase()).append("-").
 				append(this.type.toLowerCase()).append("-").
-				append(this.logic);
+				append(this.logic.toLowerCase());
 
 		return str.toString();
 	}
