@@ -35,7 +35,7 @@ public class JPAQueryBuilderTest {
 		Assert.assertNotNull(queryBuilder);
 		Assert.assertNotNull(queryBuilder.getRestrictions());
 		Assert.assertEquals(0, queryBuilder.getRestrictions().size());
-		Assert.assertEquals(queryBuilder.toString().trim(), "from Person");
+		Assert.assertEquals(queryBuilder.getQueryString().trim(), "from Person");
 	}
 
 }

@@ -30,7 +30,7 @@ implements RestrictionTypeQueryBuilderSpecification {
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString();
 		String expected = "select person from Person person where " +
 				"person.name != :name-discard-not_equal-and and " +
 				"person.birthDate != :birthDate-discard-not_equal-and";
@@ -56,7 +56,7 @@ implements RestrictionTypeQueryBuilderSpecification {
 		personQueryBuilder.select("name", "birthDate", "gender");
 		personQueryBuilder.where(restrictions);
 
-		final String actual = personQueryBuilder.toString().trim();
+		final String actual = personQueryBuilder.getQueryString();
 		final String expected = "select person.name, person.birthDate, person.gender from " +
 				"Person person where person.name != :name-discard-not_equal-or or " + 
 				"person.birthDate != :birthDate-discard-not_equal-and";
@@ -80,7 +80,7 @@ implements RestrictionTypeQueryBuilderSpecification {
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString();
 		String expected = "select person from Person person where " +
 				"person.name is null or " +
 				"person.birthDate != :birthDate-keep-not_equal-and and " +
@@ -106,7 +106,7 @@ implements RestrictionTypeQueryBuilderSpecification {
 
 		personQueryBuilder.where(restrictions);
 
-		String actual = personQueryBuilder.toString().trim();
+		String actual = personQueryBuilder.getQueryString();
 		String expected = "select person from Person person where " +
 				"person.name is null or " +
 				"person.birthDate != :birthDate-keep-not_equal-and and " +
