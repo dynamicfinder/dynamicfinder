@@ -1,5 +1,9 @@
 package org.xsalefter.finder4j;
 
+/**
+ * Define {@link RestrictionType} for {@link Restriction}.
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 public enum RestrictionType {
 	/** Default value for this enum. Produce query language "<code>where field = :param"</code>. */
 	EQUAL,
@@ -38,20 +42,18 @@ public enum RestrictionType {
 	BETWEEN;
 
 	/**
-	 * Do the same thing like {@link Enum#valueOf(String)} and set 
-	 * restrictionString parameter to upper case.
-	 * @param restrictionString to parse as {@link RestrictionType}.
-	 * @return {@link RestrictionType} instance.
-	 */
-	public static final RestrictionType of(final String restrictionString) {
-		return RestrictionType.valueOf(restrictionString.toUpperCase());
-	}
-
-	/**
-	 * Get the to lower version of this {@link Restriction#toString()}.
-	 * @return {@link String#toLowerCase()}.
+	 * Get the lower-case version of this {@link RestrictionType#toString()}.
+	 * @return {@link String#toLowerCase()} version of {@link RestrictionType#toString()}.
 	 */
 	public String toLowerCase() {
 		return this.toString().toLowerCase();
+	}
+
+	/**
+	 * Get the upper-case version of this {@link RestrictionType#toString()}.
+	 * @return {@link String#toLowerCase()} version of {@link RestrictionType#toString()}.
+	 */
+	public String toUpperCase() {
+		return this.toString().toUpperCase();
 	}
 }
