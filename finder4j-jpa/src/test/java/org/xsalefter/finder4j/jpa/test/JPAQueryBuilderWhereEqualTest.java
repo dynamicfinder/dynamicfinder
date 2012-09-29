@@ -13,6 +13,9 @@ import org.xsalefter.finder4j.RestrictionType;
 import org.xsalefter.finder4j.jpa._entity.Person.Gender;
 import org.xsalefter.finder4j.jpa._specs.RestrictionTypeQueryBuilderSpecification;
 
+/**
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 public class JPAQueryBuilderWhereEqualTest extends JPAQueryBuilderTest 
 implements RestrictionTypeQueryBuilderSpecification {
 

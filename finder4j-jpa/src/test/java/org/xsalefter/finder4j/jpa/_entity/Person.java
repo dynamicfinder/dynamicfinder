@@ -20,6 +20,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+/**
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 @Entity
 @Table(name="person")
 public class Person implements Serializable {

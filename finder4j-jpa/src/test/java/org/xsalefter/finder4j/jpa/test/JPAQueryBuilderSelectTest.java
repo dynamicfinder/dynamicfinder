@@ -3,6 +3,9 @@ package org.xsalefter.finder4j.jpa.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 public class JPAQueryBuilderSelectTest extends JPAQueryBuilderTest {
 
 	@Test

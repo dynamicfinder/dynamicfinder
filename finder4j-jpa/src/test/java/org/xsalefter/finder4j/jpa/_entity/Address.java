@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 @Entity
 @Table(name="address")
 public class Address implements Serializable {

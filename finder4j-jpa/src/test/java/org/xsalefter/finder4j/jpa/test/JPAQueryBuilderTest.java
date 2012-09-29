@@ -11,6 +11,9 @@ import org.xsalefter.finder4j.jpa._entity.Address;
 import org.xsalefter.finder4j.jpa._entity.City;
 import org.xsalefter.finder4j.jpa._entity.Person;
 
+/**
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 public class JPAQueryBuilderTest {
 
 	protected volatile Logger logger = LoggerFactory.getLogger(getClass());

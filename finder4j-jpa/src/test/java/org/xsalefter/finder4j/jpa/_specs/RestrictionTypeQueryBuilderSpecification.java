@@ -6,7 +6,7 @@ import org.xsalefter.finder4j.RestrictionType;
 /**
  * Define set of test should be performed for each {@link RestrictionType} 
  * in {@link QueryBuilder}.
- * @author xsalefter
+ * @author xsalefter (xsalefter@gmail.com)
  *
  */
 public interface RestrictionTypeQueryBuilderSpecification {
