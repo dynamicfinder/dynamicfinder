@@ -5,8 +5,8 @@ public class LikeWithPrefixRestrictionHandler extends LikeComparatorRestrictionH
 	private static final String PREFIX = "";
 	private static final String POSTFIX = ",'%'";
 
-	public LikeWithPrefixRestrictionHandler() {
-		super(PREFIX, POSTFIX);
+	public LikeWithPrefixRestrictionHandler(final String entityAliasName) {
+		super(entityAliasName, PREFIX, POSTFIX);
 	}
 
 }

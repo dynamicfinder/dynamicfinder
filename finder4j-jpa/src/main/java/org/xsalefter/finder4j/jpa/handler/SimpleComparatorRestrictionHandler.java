@@ -2,9 +2,8 @@ package org.xsalefter.finder4j.jpa.handler;
 
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Restriction;
-import org.xsalefter.finder4j.RestrictionHandler;
 import org.xsalefter.finder4j.RestrictionType;
-import org.xsalefter.finder4j.spi.AbstractRestrictionHandler;
+import org.xsalefter.finder4j.spi.RestrictionHandler;
 
 /**
  * Kind of {@link RestrictionHandler} for {@link RestrictionType#EQUAL}, 
@@ -13,7 +12,7 @@ import org.xsalefter.finder4j.spi.AbstractRestrictionHandler;
  * {@link RestrictionType#LESSER_EQUAL}.
  * @author xsalefter
  */
-class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
+class SimpleComparatorRestrictionHandler extends RestrictionHandler {
 
 	private final String characterComparator;
 
@@ -22,13 +21,15 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 	 * <code>=, !=, &gt;, &gt=, &lt;,</code> or <code>&lt=.</code>  
 	 * @param characterComparator Character string as comparator.
 	 */
-	public SimpleComparatorRestrictionHandler(final String characterComparator) {
+	public SimpleComparatorRestrictionHandler(final String entityAliasName, final String characterComparator) {
+		super(entityAliasName);
 		this.characterComparator = characterComparator;
 	}
 
 	@Override
-	public RestrictionHandler.DTO parseRestriction(Restriction restriction) {
-		Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
+	public RestrictionHandler.DTO handleRestriction(Restriction restriction) {
+		// Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
+		Object[] restrictionValues = restriction.getValues();
 		
 		if (restrictionValues.length > 1)
 			throw new IllegalArgumentException("'" + restriction.getValues() + "' restriction cannot accept more than one values.");
@@ -51,7 +52,7 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 				} else handleRestriction = (restrictionValue != null);
 
 				if (handleRestriction) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" ").
 						append(this.characterComparator).append(" :").
 						append(restrictionId);
@@ -60,13 +61,13 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 
 			case KEEP:
 				if (restrictionValue != null) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" ").append(this.characterComparator).
 						append(" :").append(restrictionId);
 
 					return new DTO(builder.toString(), true);
 				} else builder.
-						append(super.getEntityName()).append(".").
+						append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" is null");
 
 				return new DTO(builder.toString(), false);
@@ -75,4 +76,5 @@ class SimpleComparatorRestrictionHandler extends AbstractRestrictionHandler {
 				throw new IllegalStateException("Unknown Nullable value.");
 		}	
 	}
+
 }

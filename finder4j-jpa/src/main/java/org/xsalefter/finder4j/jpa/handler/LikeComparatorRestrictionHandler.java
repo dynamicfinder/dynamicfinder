@@ -2,22 +2,24 @@ package org.xsalefter.finder4j.jpa.handler;
 
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Restriction;
-import org.xsalefter.finder4j.spi.AbstractRestrictionHandler;
+import org.xsalefter.finder4j.spi.RestrictionHandler;
 
-class LikeComparatorRestrictionHandler extends AbstractRestrictionHandler {
+class LikeComparatorRestrictionHandler extends RestrictionHandler {
 
 	private String prefix;
 	private String postfix;
 
-	public LikeComparatorRestrictionHandler(String prefix, String postfix) {
-		super();
+	public LikeComparatorRestrictionHandler(final String entityAliasName, String prefix, String postfix) {
+		super(entityAliasName);
 		this.prefix = prefix;
 		this.postfix = postfix;
 	}
 
 	@Override
-	public DTO parseRestriction(Restriction restriction) {
-		Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
+	public DTO handleRestriction(Restriction restriction) {
+		// Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
+		Object[] restrictionValues = restriction.getValues();
+
 		if (restrictionValues.length > 1)
 			throw new IllegalArgumentException("'" + restriction.getValues() + "' restriction cannot accept more than one values.");
 
@@ -37,7 +39,7 @@ class LikeComparatorRestrictionHandler extends AbstractRestrictionHandler {
 				} else handleRestriction = (restrictionValue != null);
 
 				if (handleRestriction) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" like concat(").
 						append(this.prefix).
 						append(" :").append(restrictionId).
@@ -49,7 +51,7 @@ class LikeComparatorRestrictionHandler extends AbstractRestrictionHandler {
 
 			case KEEP:
 				if (restrictionValue != null) {
-					builder.append(super.getEntityName()).append(".").
+					builder.append(super.getEntityAliasName()).append(".").
 						append(fieldToRestrict).append(" like concat(").
 						append(this.prefix).
 						append(" :").append(restrictionId).

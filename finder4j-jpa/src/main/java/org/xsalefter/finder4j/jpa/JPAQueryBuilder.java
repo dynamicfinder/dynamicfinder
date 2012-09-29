@@ -8,38 +8,45 @@ import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Order;
 import org.xsalefter.finder4j.QueryBuilder;
 import org.xsalefter.finder4j.Restriction;
-import org.xsalefter.finder4j.RestrictionHandler;
-import org.xsalefter.finder4j.RestrictionHandler.DTO;
 import org.xsalefter.finder4j.RestrictionType;
 import org.xsalefter.finder4j.spi.AbstractQueryBuilder;
+import org.xsalefter.finder4j.spi.RestrictionHandler;
+import org.xsalefter.finder4j.spi.RestrictionHandler.DTO;
 
 public class JPAQueryBuilder extends AbstractQueryBuilder {
 
 	public JPAQueryBuilder(Class<?> entityClass) {
 		super(entityClass);
-		this.addRestrictionHandlers(new JPARestrictionHandler());
+		final JPARestrictionHandlerFactory handlers = 
+				new JPARestrictionHandlerFactory(super.getEntityAliasName());
+		this.addRestrictionHandlers(handlers);
+
+		super.getCountQueryStringBuilder().append("select ").
+			append("count(").append(super.getEntityAliasName()).append(")").
+			append("from ").append(super.getEntityName()).append(" ").
+			append(super.getEntityAliasName());
 	}
 
 	@Override
 	public QueryBuilder select(final String... fields) {
-		super.queryString.delete(0, super.queryString.length()); // clearing buffer.
-		super.queryString.append("select ");
+		// super.clearQueryString(); // clearing buffer.
+		super.getQueryStringBuilder().append("select ");
 		int count = 0;
 
 		if (fields.length > 0) {
 			for (String s : fields) {
 				count ++;
-				super.queryString.append(super.entityName).append(".").append(s);
+				super.getQueryStringBuilder().append(super.getEntityAliasName()).append(".").append(s);
 				if (count < fields.length) 
-					super.queryString.append(",");
-				super.queryString.append(" ");
+					super.getQueryStringBuilder().append(",");
+				super.getQueryStringBuilder().append(" ");
 			}
 		} else {
-			super.queryString.append(super.entityName).append(" ");
+			super.getQueryStringBuilder().append(super.getEntityAliasName()).append(" ");
 		}
 
-		super.queryString.append("from ").append(super.entityClassName).
-			append(" ").append(super.entityName);
+		super.getQueryStringBuilder().append("from ").append(super.getEntityName()).
+			append(" ").append(super.getEntityAliasName());
 
 		return this;
 	}
@@ -67,32 +74,31 @@ public class JPAQueryBuilder extends AbstractQueryBuilder {
 		for (int i = 0; i < restrictionSize; i++) {
 			final Restriction restriction = restrictions.get(i);
 			final RestrictionType restrictionType = restriction.getType();
-			final RestrictionHandler handler = super.restrictionHandlers.get(restrictionType);
+			final RestrictionHandler handler = super.getRestrictionHandler(restrictionType);
 
 			if (handler == null)
 				throw new NoRestrictionHandlerException(restrictionType);
 
-			handler.setEntityName(super.entityName);
-			RestrictionHandler.DTO dto = handler.parseRestriction(restriction);
+			RestrictionHandler.DTO dto = handler.handleRestriction(restriction);
 			whereQueryString.append(dto.getRestrictionString());
 
-			final boolean isRestrictionNeedParam = dto.isNeedParameter();
+			final boolean isRestrictionNeedParam = dto.hasParameterizedQueryString();
 			if (isRestrictionNeedParam) 
-				super.getRestrictions().put(restriction.getId(), restriction);
+				super.addRestriction(restriction.getId(), restriction.getValues());
 
 			if (logicCounter < restrictionSize) {
 				final Restriction nextRestriction = restrictions.get(logicCounter);
-				final DTO nextRestrictionHandlerDTO = handler.parseRestriction(nextRestriction);
+				final DTO nextRestrictionHandlerDTO = handler.handleRestriction(nextRestriction);
 				final boolean isNextRestrictionNeedParam = 
-						nextRestrictionHandlerDTO.isNeedParameter();
+						nextRestrictionHandlerDTO.hasParameterizedQueryString();
 
 				// If DISCARD, we need to make sure that no current restriction and nextRestriction 
 				// need a parameter, to deal with RestrictionLogic.
 				if (restriction.getNullable().equals(Nullable.DISCARD)) {
 					if (isRestrictionNeedParam && isNextRestrictionNeedParam) 
-						whereQueryString.append(" ").append(restriction.getLogic()).append(" ");
+						whereQueryString.append(" ").append(restriction.getLogic().toLowerCase()).append(" ");
 				} else if (restriction.getNullable().equals(Nullable.KEEP)) {
-					whereQueryString.append(" ").append(restriction.getLogic()).append(" ");
+					whereQueryString.append(" ").append(restriction.getLogic().toLowerCase()).append(" ");
 				}
 
 				logicCounter ++;
@@ -101,7 +107,8 @@ public class JPAQueryBuilder extends AbstractQueryBuilder {
 		} // end of for.
 
 		if (whereQueryString.length() > 0) {
-			super.queryString.append(" where ").append(whereQueryString.toString());
+			super.getQueryStringBuilder().append(" where ").append(whereQueryString.toString());
+			super.getCountQueryStringBuilder().append(" where ").append(whereQueryString.toString());
 		}
 		return this;
 	}
@@ -119,33 +126,39 @@ public class JPAQueryBuilder extends AbstractQueryBuilder {
 	}
 
 	@Override
-	public QueryBuilder limit(int index, int dataSize) {
-		// TODO Auto-generated method stub
-		return this;
-	}
+	public String getQueryString() {
+		final String result = super.getQueryStringBuilder().length() > 0 ? 
+			super.getQueryStringBuilder().toString().trim() : 
+			new StringBuilder().append("from ").append(super.getEntityName()).toString();
 
-	public String toString() {
-		final String result = 
-				super.queryString.length() > 0 ? 
-				super.queryString.toString() : "from " + super.entityClassName;
+		super.getQueryStringBuilder().setLength(0);
 
-		if (logger.isDebugEnabled()) logger.debug(result);
+		if (logger.isDebugEnabled()) 
+			logger.debug(result);
 
 		return result;
 	}
 
+	@Override
+	public String getCountQueryString() {
+		final String result = super.getCountQueryStringBuilder().toString().trim();
+		super.getCountQueryStringBuilder().setLength(0);
+		return result;
+	}
+
 	/**
-	 * Call when {@link #where(List)} method found that the {@link #queryString} 
-	 * is empty because the {@link #select(String...)} method is not called 
-	 * (which is considered as valid).
+	 * Call when {@link #where(List)} method found that the 
+	 * {@link #getQueryStringBuilder()} is empty because the 
+	 * {@link #select(String...)} method is not called (which is considered as 
+	 * valid).
 	 */
 	protected void handleEmptySelect() {
 		// If people too lazy to call {@link QueryBuilder#select()}
-		if (super.queryString.length() == 0) {
-			super.queryString.
-				append("select ").append(super.entityName).
-				append(" from ").append(super.entityClassName).
-				append(" ").append(super.entityName);
+		if (super.getQueryStringBuilder().length() == 0) {
+			super.getQueryStringBuilder().
+				append("select ").append(super.getEntityAliasName()).
+				append(" from ").append(super.getEntityName()).
+				append(" ").append(super.getEntityAliasName());
 		}
 	}
 }
