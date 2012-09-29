@@ -10,7 +10,7 @@ import org.xsalefter.finder4j.spi.RestrictionHandler;
  * {@link RestrictionType#NOT_EQUAL}, {@link RestrictionType#GREATER},
  * {@link RestrictionType#GREATER_EQUAL}, {@link RestrictionType#LESSER},
  * {@link RestrictionType#LESSER_EQUAL}.
- * @author xsalefter
+ * @author xsalefter (xsalefter@gmail.com)
  */
 class SimpleComparatorRestrictionHandler extends RestrictionHandler {
 

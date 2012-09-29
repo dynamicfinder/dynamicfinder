@@ -1,0 +1,64 @@
+-------------------------------------------------
+To Deal With Compile Error:
+Try to think that RestrictionHandler in fact is a SPI, (which is considerately 
+should be used by framework developers, not end-user/application developers). 
+So it might be ok to have #getEntityName on it. 
+
+Another things is that please consider to:
+- add #getFullPathProperty() to Restriction handler, to used by restriction 
+  handler / query builder to get full path (entity + field) properly.
+- More over, think to create Property class that will encapsulate field(s) and 
+  it's value and hide entity name prefix properly. Example
+  PropertyBuilder pb = new PropertyBuilder(Person.class);
+  QueryBuilder qb = new JPAQueryBuilder(Person.class);
+  qb.select(pb.get("name"), pb.("address"));
+  // or
+  qb.select($$("name"), $$("address")); 
+
+-------------------------------------------------
+new Restriction("field", EQUAL, KEEP) produce "where entity.field is null" 
+in case there's no value(s) passed to Restriction. How if we have
+new Restriction("field", NOT_EQUAL, KEEP) ? Do we pass the same value as EQUAL,
+which is "where entity.field is null" or do we need another semantics?
+
+-------------------------------------------------
+Re-Design ResultMapper Interface To More Flexible
+
+Seems like ResultMapper is going to wrong direction. Let say we have:
+
+/**
+ * Used to display something like:
+ * First Previous [1] [2] [3] ... [10] Next Last 
+ */
+public interface JQueryDataTableResultMapper<E> extends ListResultMapper<E> {
+    /** [1] [2] [3] [4] */
+    int[] getPagingNumbers();
+    
+    int getFirstDataIndex();
+    int getPreviousDataIndex();
+    // etc etc.. 
+}
+
+How do we going to tell the Finder implementation that method Finder#find need 
+to return JQueryDataTableResultMapper instance instead of ListResultMapper?
+
+A:  Well, this is obvious: By extending the Finder interface.
+Q:  But the Finder interface doesn't provide any way to get it's implementation 
+    details.
+A:  Nah, that is SPI what for. Write SPI that provide any object for the Finder
+    interface to build the query.
+ 
+Well, let see.
+
+
+------------------------------------------------------
+Do We Really Need Finder#join(String...fields) method?
+
+Of course! There's a people out there that don't like OSIV/OEMIV Servlet Filter 
+and prefer explicit join on their HQL/JPQL.
+
+
+-------------------------------------------------------
+How If We Add New Cool Feature Like $ (Dollar) Project?
+
+Sure we can. But just make sure the crucial functional was satisfied.

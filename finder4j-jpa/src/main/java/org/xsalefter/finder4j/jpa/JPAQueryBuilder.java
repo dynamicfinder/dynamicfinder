@@ -13,6 +13,11 @@ import org.xsalefter.finder4j.spi.AbstractQueryBuilder;
 import org.xsalefter.finder4j.spi.RestrictionHandler;
 import org.xsalefter.finder4j.spi.RestrictionHandler.DTO;
 
+/**
+ * Implementation of {@link QueryBuilder} for Java Persistence API.
+ * @author xsalefter (xsalefter@gmail.com)
+ * @see JPARestrictionHandlerFactory
+ */
 public class JPAQueryBuilder extends AbstractQueryBuilder {
 
 	public JPAQueryBuilder(Class<?> entityClass) {

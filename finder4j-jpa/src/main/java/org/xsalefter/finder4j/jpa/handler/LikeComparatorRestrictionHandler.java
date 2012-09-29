@@ -2,8 +2,14 @@ package org.xsalefter.finder4j.jpa.handler;
 
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Restriction;
+import org.xsalefter.finder4j.RestrictionType;
 import org.xsalefter.finder4j.spi.RestrictionHandler;
 
+/**
+ * Kind of {@link RestrictionHandler} for {@link RestrictionType#LIKE}, 
+ * {@link RestrictionType#LIKE_WITH_POSTFIX}, {@link RestrictionType#LIKE_WITH_PREFIX}.
+ * @author xsalefter (xsalefter@gmail.com)
+ */
 class LikeComparatorRestrictionHandler extends RestrictionHandler {
 
 	private String prefix;
