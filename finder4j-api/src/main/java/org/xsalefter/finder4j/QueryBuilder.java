@@ -1,5 +1,6 @@
 package org.xsalefter.finder4j;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,17 +23,15 @@ import java.util.Map;
  *     If <code>someName</code> and <code>someDate</code> is not null, 
  *     <code>queryString</code> value would produce something like: <br/>
  *     <code>
- *     select person from Person person 
- *     where person.name = :name_discard_equal_and and 
- *     person.birthDate = :birthDate_discard_equal_and
+ *     select person from Person person where person.name = ?1 
+ *     and person.birthDate = ?2
  *     </code>
  *   </li>
  *   <li>
  *     If <code>someName</code> is empty or null and <code>someDate</code> is not 
  *     null, <code>queryString</code> value would produce something like: <br/>
  *     <code>
- *     select person from Person person 
- *     person.birthDate = :birthDate_discard_equal_and
+ *     select person from Person person person.birthDate = ?1
  *     </code>
  *   </li>
  *   <li>
@@ -44,8 +43,7 @@ import java.util.Map;
  *     <code>queryString</code> value would produce something like: <br/>
  *     <code>
  *     select person from Person person 
- *     where person.name is null and 
- *     person.birthDate = :birthDate_discard_equal_and
+ *     where person.name is null and person.birthDate = ?1
  *     </code>
  *   </li>
  * </ul>
@@ -63,6 +61,22 @@ import java.util.Map;
  * 
  * @author xsalefter (xsalefter@gmail.com)
  */
+/* NOTE: 
+ * - One reason we doesn't have QueryBuilder#from() method is that it's easy to 
+ *   forget to call from() method. Another reason is that to force client code to 
+ *   define the entity name on constructor.
+ * - Problem with named parameter binding is that how we supposed to deal with 
+ *   this issue:
+ *   select person from Person person where person.name = :person_name_param_1 
+ *   or person.name = :person_name_param_2
+ *   
+ *   of course we could use List<RestrictionMap> getRestrictions() instead of 
+ *   Map<Integer, Restriction> getRestrictions(), but it's start another 
+ *   complexity:
+ *   - Incompatible with (future) JDBC.
+ *   - The key need to be generic, to minimize bug that could be appear when use
+ *     Object as a key.
+ */ 
 public interface QueryBuilder {
 
 	/**
@@ -122,13 +136,13 @@ public interface QueryBuilder {
 	 * {@link RestrictionHandler#handleRestriction(Restriction)} when 
 	 * {@link RestrictionHandler.DTO#hasParameterizedQueryString()} is true.
 	 * </p>
-	 * <p>That this method should return read-only/unmodifiable list. Thus, 
-	 * any modification to this method should throw 
+	 * <p>That this method should return read-only/unmodifiable {@link Map}. 
+	 * Thus, any modification to this method should throw 
 	 * {@link UnsupportedOperationException} at runtime.</p>
 	 * 
-	 * @return {@link Collections#unmodifiableList(List)} of {@link Restriction}s.
+	 * @return {@link Collections#unmodifiableMap(Map)} of {@link Restriction}s.
 	 */
-	Map<String, Object> getRestrictions();
+	Map<Integer, Restriction> getRestrictions();
 
 	/**
 	 * Get parameterized query {@link String}. Invoke this method should clearing 
