@@ -28,18 +28,13 @@ class SimpleComparatorRestrictionHandler extends RestrictionHandler {
 
 	@Override
 	public RestrictionHandler.DTO handleRestriction(Restriction restriction) {
-		// Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
-		Object[] restrictionValues = restriction.getValues();
-		
-		if (restrictionValues.length > 1)
-			throw new IllegalArgumentException("'" + restriction.getValues() + "' restriction cannot accept more than one values.");
-
 		final StringBuilder builder = new StringBuilder();
 		final Nullable nullable = restriction.getNullable();
 
-		final String restrictionId = restriction.getId();
+		final String restrictionId = " ?" + restriction.getParameter();
 		final String fieldToRestrict = restriction.getField();
-		final Object restrictionValue = restrictionValues[0];
+		final String entityAndField = super.getEntityAliasName() + "." + fieldToRestrict;
+		final Object restrictionValue = restriction.getValue();
 
 		switch (nullable) {
 			case DISCARD:
@@ -52,23 +47,20 @@ class SimpleComparatorRestrictionHandler extends RestrictionHandler {
 				} else handleRestriction = (restrictionValue != null);
 
 				if (handleRestriction) {
-					builder.append(super.getEntityAliasName()).append(".").
-						append(fieldToRestrict).append(" ").
-						append(this.characterComparator).append(" :").
+					builder.append(entityAndField).append(" ").
+						append(this.characterComparator).
 						append(restrictionId);
 					return new DTO(builder.toString(), true);
 				} else return new DTO(builder.toString(), false); 
 
 			case KEEP:
 				if (restrictionValue != null) {
-					builder.append(super.getEntityAliasName()).append(".").
-						append(fieldToRestrict).append(" ").append(this.characterComparator).
-						append(" :").append(restrictionId);
+					builder.append(entityAndField).append(" ").
+						append(this.characterComparator).append(restrictionId);
 
 					return new DTO(builder.toString(), true);
 				} else builder.
-						append(super.getEntityAliasName()).append(".").
-						append(fieldToRestrict).append(" is null");
+						append(entityAndField).append(" is null");
 
 				return new DTO(builder.toString(), false);
 

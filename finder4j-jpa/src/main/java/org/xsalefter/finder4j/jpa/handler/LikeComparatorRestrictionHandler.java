@@ -23,18 +23,13 @@ class LikeComparatorRestrictionHandler extends RestrictionHandler {
 
 	@Override
 	public DTO handleRestriction(Restriction restriction) {
-		// Object[] restrictionValues = super.handleRestrictionValue(restriction.getValues());
-		Object[] restrictionValues = restriction.getValues();
-
-		if (restrictionValues.length > 1)
-			throw new IllegalArgumentException("'" + restriction.getValues() + "' restriction cannot accept more than one values.");
-
 		final StringBuilder builder = new StringBuilder();
 		final Nullable nullable = restriction.getNullable();
 
-		final String restrictionId = restriction.getId();
+		final String restrictionId = " ?" + restriction.getParameter();
 		final String fieldToRestrict = restriction.getField();
-		final Object restrictionValue = restrictionValues[0];
+		final String entityAndField = super.getEntityAliasName() + "." + fieldToRestrict;
+		final Object restrictionValue = restriction.getValue();
 
 		switch (nullable) {
 			case DISCARD:
@@ -45,11 +40,12 @@ class LikeComparatorRestrictionHandler extends RestrictionHandler {
 				} else handleRestriction = (restrictionValue != null);
 
 				if (handleRestriction) {
-					builder.append(super.getEntityAliasName()).append(".").
-						append(fieldToRestrict).append(" like concat(").
+					builder.append(entityAndField).
+						append(" like concat(").
 						append(this.prefix).
-						append(" :").append(restrictionId).
-						append(this.postfix).append(")");
+						append(restrictionId).
+						append(this.postfix).
+						append(")");
 					return new DTO(builder.toString(), true);
 				} else {
 					return new DTO(builder.toString(), false);
@@ -57,10 +53,10 @@ class LikeComparatorRestrictionHandler extends RestrictionHandler {
 
 			case KEEP:
 				if (restrictionValue != null) {
-					builder.append(super.getEntityAliasName()).append(".").
-						append(fieldToRestrict).append(" like concat(").
+					builder.append(entityAndField).
+						append(" like concat(").
 						append(this.prefix).
-						append(" :").append(restrictionId).
+						append(restrictionId).
 						append(this.postfix).append(")");
 
 					return new DTO(builder.toString(), true);
