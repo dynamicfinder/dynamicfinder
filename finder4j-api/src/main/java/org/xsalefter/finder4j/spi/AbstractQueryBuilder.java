@@ -33,7 +33,7 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 	private final String entityAliasName;
 
 	private final Map<RestrictionType, RestrictionHandler> restrictionHandlers;
-	private final Map<String, Object> restrictions;
+	private final Map<Integer, Restriction> restrictions;
 
 	public AbstractQueryBuilder(final Class<?> entityClass) {
 		this.queryStringBuilder = new StringBuilder();
@@ -43,7 +43,7 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		this.entityAliasName = Introspector.decapitalize(this.entityName);
 
 		this.restrictionHandlers = new HashMap<RestrictionType, RestrictionHandler>();
-		this.restrictions = new HashMap<String, Object>();
+		this.restrictions = new HashMap<Integer, Restriction>();
 
 		logger.debug("Creating new AbstractQueryBuilder for '{}'", this.entityName);
 	}
@@ -56,13 +56,13 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		this.entityAliasName = Introspector.decapitalize(this.entityName);
 
 		this.restrictionHandlers = new HashMap<RestrictionType, RestrictionHandler>();
-		this.restrictions = new HashMap<String, Object>();
+		this.restrictions = new HashMap<Integer, Restriction>();
 
 		logger.debug("Creating new AbstractQueryBuilder for '{}'", this.entityName);
 	}
 
 	@Override
-	public final Map<String, Object> getRestrictions() {
+	public final Map<Integer, Restriction> getRestrictions() {
 		return Collections.unmodifiableMap(this.restrictions);
 	}
 
@@ -76,8 +76,8 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 	 * @param value value of restriction, to binding to parameterized query 
 	 *   string.
 	 */
-	protected final void addRestriction(final String key, final Object value) {
-		this.restrictions.put(key, value);
+	protected final void addRestriction(final Integer id, final Restriction value) {
+		this.restrictions.put(id, value);
 	}
 
 	/**
