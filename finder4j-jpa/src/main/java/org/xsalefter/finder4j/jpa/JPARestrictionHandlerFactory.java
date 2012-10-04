@@ -18,11 +18,11 @@ import org.xsalefter.finder4j.spi.RestrictionHandler;
  * Put all classes under package <code>org.xsalefter.finder4j.jpa.handler</code>.
  * @author xsalefter (xsalefter@gmail.com)
  */
-public class JPARestrictionHandlerFactory extends HashMap<RestrictionType, RestrictionHandler> {
+public class JpaRestrictionHandlerFactory extends HashMap<RestrictionType, RestrictionHandler> {
 
 	private static final long serialVersionUID = 1L;
 
-	public JPARestrictionHandlerFactory(final String entityAliasName) {
+	public JpaRestrictionHandlerFactory(final String entityAliasName) {
 		super.put(RestrictionType.EQUAL, new EqualRestrictionHandler(entityAliasName));
 		super.put(RestrictionType.NOT_EQUAL, new NotEqualRestrictionHandler(entityAliasName));
 		super.put(RestrictionType.GREATER, new GreaterRestrictionHandler(entityAliasName));
