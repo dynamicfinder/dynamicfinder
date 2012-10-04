@@ -7,9 +7,10 @@ package org.xsalefter.finder4j;
 public enum RestrictionLogic {
 
 	/** 
-	 * Append 'and' string to restriction string. If {@link Restriction} 
-	 * position is in the end of whole restriction, the {@link QueryBuilder} 
-	 * implementation would ignore this logic.
+	 * Default value for {@link RestrictionLogic}. Append 'and' string to 
+	 * restriction string. If {@link Restriction} position is in the end of 
+	 * whole restriction, the {@link QueryBuilder} implementation would ignore 
+	 * this logic.
 	 */
 	AND,
 
