@@ -16,14 +16,14 @@ import org.xsalefter.finder4j.spi.RestrictionHandler.DTO;
 /**
  * Implementation of {@link QueryBuilder} for Java Persistence API.
  * @author xsalefter (xsalefter@gmail.com)
- * @see JPARestrictionHandlerFactory
+ * @see JpaRestrictionHandlerFactory
  */
-public class JPAQueryBuilder extends AbstractQueryBuilder {
+public class JpaQueryBuilder extends AbstractQueryBuilder {
 
-	public JPAQueryBuilder(Class<?> entityClass) {
+	public JpaQueryBuilder(Class<?> entityClass) {
 		super(entityClass);
-		final JPARestrictionHandlerFactory handlers = 
-				new JPARestrictionHandlerFactory(super.getEntityAliasName());
+		final JpaRestrictionHandlerFactory handlers = 
+				new JpaRestrictionHandlerFactory(super.getEntityAliasName());
 		this.addRestrictionHandlers(handlers);
 
 		super.getCountQueryStringBuilder().append("select ").
@@ -78,18 +78,19 @@ public class JPAQueryBuilder extends AbstractQueryBuilder {
 
 		for (int i = 0; i < restrictionSize; i++) {
 			final Restriction restriction = restrictions.get(i);
-			final RestrictionType restrictionType = restriction.getType();
+			restriction.setParameter(super.getRestrictionSize() + 1);
+			final RestrictionType restrictionType = restriction.getRestrictionType();
 			final RestrictionHandler handler = super.getRestrictionHandler(restrictionType);
 
 			if (handler == null)
 				throw new NoRestrictionHandlerException(restrictionType);
 
-			RestrictionHandler.DTO dto = handler.handleRestriction(restriction);
+			final RestrictionHandler.DTO dto = handler.handleRestriction(restriction);
 			whereQueryString.append(dto.getRestrictionString());
 
-			final boolean isRestrictionNeedParam = dto.hasParameterizedQueryString();
-			if (isRestrictionNeedParam) 
-				super.addRestriction(restriction.getId(), restriction.getValues());
+			final boolean isRestrictionParameterized = dto.hasParameterizedQueryString();
+			if (isRestrictionParameterized)
+				super.addRestriction(restriction.getParameter(), restriction);
 
 			if (logicCounter < restrictionSize) {
 				final Restriction nextRestriction = restrictions.get(logicCounter);
@@ -97,13 +98,19 @@ public class JPAQueryBuilder extends AbstractQueryBuilder {
 				final boolean isNextRestrictionNeedParam = 
 						nextRestrictionHandlerDTO.hasParameterizedQueryString();
 
-				// If DISCARD, we need to make sure that no current restriction and nextRestriction 
-				// need a parameter, to deal with RestrictionLogic.
+				// If DISCARD, we need to make sure that no current restriction 
+				// and nextRestriction need a parameter, to deal with RestrictionLogic.
 				if (restriction.getNullable().equals(Nullable.DISCARD)) {
-					if (isRestrictionNeedParam && isNextRestrictionNeedParam) 
-						whereQueryString.append(" ").append(restriction.getLogic().toLowerCase()).append(" ");
+					if (isRestrictionParameterized && isNextRestrictionNeedParam) 
+						whereQueryString.
+							append(" ").
+							append(restriction.getRestrictionLogic().toLowerCase()).
+							append(" ");
 				} else if (restriction.getNullable().equals(Nullable.KEEP)) {
-					whereQueryString.append(" ").append(restriction.getLogic().toLowerCase()).append(" ");
+					whereQueryString.
+						append(" ").
+						append(restriction.getRestrictionLogic().toLowerCase()).
+						append(" ");
 				}
 
 				logicCounter ++;
