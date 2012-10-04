@@ -1,4 +1,4 @@
-package org.xsalefter.finder4j.jpa.test;
+package org.xsalefter.finder4j.jpa.test.unit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * @author xsalefter (xsalefter@gmail.com)
  */
-public class JPAQueryBuilderSelectTest extends JPAQueryBuilderTest {
+public class JpaQueryBuilderSelectTest extends JpaQueryBuilderTest {
 
 	@Test
 	public void selectWithEmptyParameter() {
