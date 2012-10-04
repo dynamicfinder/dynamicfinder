@@ -8,7 +8,7 @@ import org.xsalefter.finder4j.RestrictionLogic;
 import org.xsalefter.finder4j.RestrictionType;
 
 /**
- * Define data structure for query restriction.
+ * Define data structure for query restriction for Java Persistence API.
  * @author xsalefter (xsalefter@gmail.com)
  */
 public class JpaRestriction implements Restriction, Serializable {
