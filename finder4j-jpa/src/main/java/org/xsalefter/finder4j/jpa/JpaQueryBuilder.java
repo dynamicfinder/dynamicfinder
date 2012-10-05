@@ -36,18 +36,6 @@ public class JpaQueryBuilder extends AbstractQueryBuilder {
 			append(this.getEntityAliasName());
 	}
 
-//	public JpaQueryBuilder(Class<?> entityClass) {
-//		super(entityClass);
-//		final JpaRestrictionHandlerFactory handlers = 
-//				new JpaRestrictionHandlerFactory(super.getEntityAliasName());
-//		this.addRestrictionHandlers(handlers);
-//
-//		super.getCountQueryStringBuilder().append("select ").
-//			append("count(").append(super.getEntityAliasName()).append(")").
-//			append("from ").append(super.getEntityName()).append(" ").
-//			append(super.getEntityAliasName());
-//	}
-
 	@Override
 	public QueryBuilder select(final String... fields) {
 		super.getQueryStringBuilder().append("select ");
