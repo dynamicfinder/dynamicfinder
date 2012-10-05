@@ -1,9 +1,11 @@
 package org.xsalefter.finder4j.jpa;
 
+import java.beans.Introspector;
 import java.util.Arrays;
 import java.util.List;
 
-import org.xsalefter.finder4j.NoRestrictionHandlerException;
+import javax.persistence.Entity;
+
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Order;
 import org.xsalefter.finder4j.QueryBuilder;
@@ -20,38 +22,58 @@ import org.xsalefter.finder4j.spi.RestrictionHandler.DTO;
  */
 public class JpaQueryBuilder extends AbstractQueryBuilder {
 
-	public JpaQueryBuilder(Class<?> entityClass) {
-		super(entityClass);
-		final JpaRestrictionHandlerFactory handlers = 
-				new JpaRestrictionHandlerFactory(super.getEntityAliasName());
-		this.addRestrictionHandlers(handlers);
+	private String entityName;
+	private String entityAliasName;
+
+	public JpaQueryBuilder(final Class<?> entityClass) {
+		super();
+		this.createEntityAliasAndNameFromClass(entityClass);
+		this.addRestrictionHandlers(new JpaRestrictionHandlerFactory(this));
 
 		super.getCountQueryStringBuilder().append("select ").
-			append("count(").append(super.getEntityAliasName()).append(")").
-			append("from ").append(super.getEntityName()).append(" ").
-			append(super.getEntityAliasName());
+			append("count(").append(this.getEntityAliasName()).append(")").
+			append("from ").append(this.getEntityName()).append(" ").
+			append(this.getEntityAliasName());
 	}
+
+//	public JpaQueryBuilder(Class<?> entityClass) {
+//		super(entityClass);
+//		final JpaRestrictionHandlerFactory handlers = 
+//				new JpaRestrictionHandlerFactory(super.getEntityAliasName());
+//		this.addRestrictionHandlers(handlers);
+//
+//		super.getCountQueryStringBuilder().append("select ").
+//			append("count(").append(super.getEntityAliasName()).append(")").
+//			append("from ").append(super.getEntityName()).append(" ").
+//			append(super.getEntityAliasName());
+//	}
 
 	@Override
 	public QueryBuilder select(final String... fields) {
-		// super.clearQueryString(); // clearing buffer.
 		super.getQueryStringBuilder().append("select ");
 		int count = 0;
 
 		if (fields.length > 0) {
-			for (String s : fields) {
+			for (String fieldName : fields) {
 				count ++;
-				super.getQueryStringBuilder().append(super.getEntityAliasName()).append(".").append(s);
-				if (count < fields.length) 
+
+				super.getQueryStringBuilder().
+					append(this.getEntityAliasName()).
+					append(".").
+					append(fieldName);
+
+				if (count < fields.length)
 					super.getQueryStringBuilder().append(",");
+
 				super.getQueryStringBuilder().append(" ");
 			}
 		} else {
-			super.getQueryStringBuilder().append(super.getEntityAliasName()).append(" ");
+			super.getQueryStringBuilder().append(this.getEntityAliasName()).append(" ");
 		}
 
-		super.getQueryStringBuilder().append("from ").append(super.getEntityName()).
-			append(" ").append(super.getEntityAliasName());
+		super.getQueryStringBuilder().
+			append("from ").append(this.getEntityName()).
+			append(" ").append(this.getEntityAliasName());
 
 		return this;
 	}
@@ -78,25 +100,22 @@ public class JpaQueryBuilder extends AbstractQueryBuilder {
 
 		for (int i = 0; i < restrictionSize; i++) {
 			final Restriction restriction = restrictions.get(i);
-			restriction.setParameter(super.getRestrictionSize() + 1);
+			restriction.setParameter(super.getRestrictionSize() + 1); // Any better idea than this??
+
 			final RestrictionType restrictionType = restriction.getRestrictionType();
 			final RestrictionHandler handler = super.getRestrictionHandler(restrictionType);
-
-			if (handler == null)
-				throw new NoRestrictionHandlerException(restrictionType);
-
 			final RestrictionHandler.DTO dto = handler.handleRestriction(restriction);
 			whereQueryString.append(dto.getRestrictionString());
 
 			final boolean isRestrictionParameterized = dto.hasParameterizedQueryString();
+
 			if (isRestrictionParameterized)
 				super.addRestriction(restriction.getParameter(), restriction);
 
 			if (logicCounter < restrictionSize) {
 				final Restriction nextRestriction = restrictions.get(logicCounter);
 				final DTO nextRestrictionHandlerDTO = handler.handleRestriction(nextRestriction);
-				final boolean isNextRestrictionNeedParam = 
-						nextRestrictionHandlerDTO.hasParameterizedQueryString();
+				final boolean isNextRestrictionNeedParam = nextRestrictionHandlerDTO.hasParameterizedQueryString();
 
 				// If DISCARD, we need to make sure that no current restriction 
 				// and nextRestriction need a parameter, to deal with RestrictionLogic.
@@ -141,7 +160,7 @@ public class JpaQueryBuilder extends AbstractQueryBuilder {
 	public String getQueryString() {
 		final String result = super.getQueryStringBuilder().length() > 0 ? 
 			super.getQueryStringBuilder().toString().trim() : 
-			new StringBuilder().append("from ").append(super.getEntityName()).toString();
+			new StringBuilder().append("from ").append(this.getEntityName()).toString();
 
 		super.getQueryStringBuilder().setLength(0);
 
@@ -158,6 +177,11 @@ public class JpaQueryBuilder extends AbstractQueryBuilder {
 		return result;
 	}
 
+	@Override
+	public String getEntityAliasName() {
+		return this.entityAliasName;
+	}
+
 	/**
 	 * Call when {@link #where(List)} method found that the 
 	 * {@link #getQueryStringBuilder()} is empty because the 
@@ -168,9 +192,23 @@ public class JpaQueryBuilder extends AbstractQueryBuilder {
 		// If people too lazy to call {@link QueryBuilder#select()}
 		if (super.getQueryStringBuilder().length() == 0) {
 			super.getQueryStringBuilder().
-				append("select ").append(super.getEntityAliasName()).
-				append(" from ").append(super.getEntityName()).
-				append(" ").append(super.getEntityAliasName());
+				append("select ").append(this.getEntityAliasName()).
+				append(" from ").append(this.getEntityName()).
+				append(" ").append(this.getEntityAliasName());
 		}
+	}
+
+	protected String getEntityName() {
+		return this.entityName;
+	}
+
+	private void createEntityAliasAndNameFromClass(Class<?> entityClass) {
+		if (entityClass.isAnnotationPresent(Entity.class) && 
+			!entityClass.getAnnotation(Entity.class).name().equals("")) 
+			this.entityName = entityClass.getAnnotation(Entity.class).name();
+		else 
+			this.entityName = entityClass.getSimpleName();
+
+		this.entityAliasName = Introspector.decapitalize(this.entityName);
 	}
 }

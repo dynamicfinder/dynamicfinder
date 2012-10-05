@@ -3,6 +3,7 @@ package org.xsalefter.finder4j.jpa.handler;
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Restriction;
 import org.xsalefter.finder4j.RestrictionType;
+import org.xsalefter.finder4j.spi.AbstractQueryBuilder;
 import org.xsalefter.finder4j.spi.RestrictionHandler;
 
 /**
@@ -21,8 +22,11 @@ class SimpleComparatorRestrictionHandler extends RestrictionHandler {
 	 * <code>=, !=, &gt;, &gt=, &lt;,</code> or <code>&lt=.</code>  
 	 * @param characterComparator Character string as comparator.
 	 */
-	public SimpleComparatorRestrictionHandler(final String entityAliasName, final String characterComparator) {
-		super(entityAliasName);
+	public SimpleComparatorRestrictionHandler(
+		final AbstractQueryBuilder queryBuilder, 
+		final String characterComparator) {
+
+		super(queryBuilder);
 		this.characterComparator = characterComparator;
 	}
 

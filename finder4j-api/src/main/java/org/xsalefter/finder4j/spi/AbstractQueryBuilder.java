@@ -1,6 +1,5 @@
 package org.xsalefter.finder4j.spi;
 
-import java.beans.Introspector;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,38 +27,17 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 	/** Used to handle count / data size based on added {@link Restriction} */
 	private final StringBuilder countQueryStringBuilder;
 
-	private final Class<?> entityClass;
-	private final String entityName;
-	private final String entityAliasName;
-
 	private final Map<RestrictionType, RestrictionHandler> restrictionHandlers;
 	private final Map<Integer, Restriction> restrictions;
 
-	public AbstractQueryBuilder(final Class<?> entityClass) {
+	public AbstractQueryBuilder() {
 		this.queryStringBuilder = new StringBuilder();
 		this.countQueryStringBuilder = new StringBuilder();
-		this.entityClass = entityClass;
-		this.entityName = this.entityClass.getSimpleName();
-		this.entityAliasName = Introspector.decapitalize(this.entityName);
-
 		this.restrictionHandlers = new HashMap<RestrictionType, RestrictionHandler>();
 		this.restrictions = new HashMap<Integer, Restriction>();
-
-		logger.debug("Creating new AbstractQueryBuilder for '{}'", this.entityName);
 	}
 
-	public AbstractQueryBuilder(final String entityName) {
-		this.queryStringBuilder = new StringBuilder();
-		this.countQueryStringBuilder = new StringBuilder();
-		this.entityClass = Object.class;
-		this.entityName = entityName;
-		this.entityAliasName = Introspector.decapitalize(this.entityName);
-
-		this.restrictionHandlers = new HashMap<RestrictionType, RestrictionHandler>();
-		this.restrictions = new HashMap<Integer, Restriction>();
-
-		logger.debug("Creating new AbstractQueryBuilder for '{}'", this.entityName);
-	}
+	public abstract String getEntityAliasName();
 
 	@Override
 	public final Map<Integer, Restriction> getRestrictions() {
@@ -150,21 +128,4 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		return countQueryStringBuilder;
 	}
 
-	/**
-	 * Get entity name. 
-	 * @return {@link String} entity name.
-	 */
-	public final String getEntityName() {
-		return entityName;
-	}
-
-	/**
-	 * Get entity alias name. Currently, implementation detail for this method 
-	 * is using {@link Introspector#decapitalize(String)} and pass 
-	 * {@link #getEntityName()} as parameter value.
-	 * @return {@link String} entity alias name.
-	 */
-	public final String getEntityAliasName() {
-		return entityAliasName;
-	}
 }

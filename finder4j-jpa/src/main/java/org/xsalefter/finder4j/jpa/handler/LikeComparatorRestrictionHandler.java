@@ -3,6 +3,7 @@ package org.xsalefter.finder4j.jpa.handler;
 import org.xsalefter.finder4j.Nullable;
 import org.xsalefter.finder4j.Restriction;
 import org.xsalefter.finder4j.RestrictionType;
+import org.xsalefter.finder4j.spi.AbstractQueryBuilder;
 import org.xsalefter.finder4j.spi.RestrictionHandler;
 
 /**
@@ -15,8 +16,12 @@ class LikeComparatorRestrictionHandler extends RestrictionHandler {
 	private String prefix;
 	private String postfix;
 
-	public LikeComparatorRestrictionHandler(final String entityAliasName, String prefix, String postfix) {
-		super(entityAliasName);
+	public LikeComparatorRestrictionHandler(
+		final AbstractQueryBuilder queryBuilder, 
+		final String prefix, 
+		final String postfix) {
+
+		super(queryBuilder);
 		this.prefix = prefix;
 		this.postfix = postfix;
 	}

@@ -14,14 +14,14 @@ import org.xsalefter.finder4j.Restriction;
  */
 public abstract class RestrictionHandler {
 
-	private final String entityAliasName;
+	private final AbstractQueryBuilder abstractQueryBuilder;
 
-	public RestrictionHandler(final String entityAliasName) {
-		this.entityAliasName = entityAliasName;
+	public RestrictionHandler(AbstractQueryBuilder abstractQueryBuilder) {
+		this.abstractQueryBuilder = abstractQueryBuilder;
 	}
 
 	protected final String getEntityAliasName() {
-		return this.entityAliasName;
+		return this.abstractQueryBuilder.getEntityAliasName();
 	}
 
 	/**
