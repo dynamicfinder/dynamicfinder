@@ -16,10 +16,18 @@ public abstract class RestrictionHandler {
 
 	private final AbstractQueryBuilder abstractQueryBuilder;
 
+	/**
+	 * Create new instance of {@link RestrictionHandler}.
+	 * @param abstractQueryBuilder to use.
+	 */
 	public RestrictionHandler(AbstractQueryBuilder abstractQueryBuilder) {
 		this.abstractQueryBuilder = abstractQueryBuilder;
 	}
 
+	/**
+	 * Do same thing as {@link AbstractQueryBuilder#getEntityAliasName()}.
+	 * @return {@link String} entity alias name.
+	 */
 	protected final String getEntityAliasName() {
 		return this.abstractQueryBuilder.getEntityAliasName();
 	}

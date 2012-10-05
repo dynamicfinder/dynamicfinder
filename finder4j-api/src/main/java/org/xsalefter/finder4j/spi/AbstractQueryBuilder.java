@@ -37,6 +37,11 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 		this.restrictions = new HashMap<Integer, Restriction>();
 	}
 
+	/**
+	 * Get entity alias name. {@link QueryBuilder} implementation would use 
+	 * this for creating the query.
+	 * @return {@link String} entity alias name.
+	 */
 	public abstract String getEntityAliasName();
 
 	@Override
