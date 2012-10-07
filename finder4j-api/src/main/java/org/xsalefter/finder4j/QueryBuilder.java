@@ -56,7 +56,7 @@ import java.util.Map;
  * {@link #getQueryString()}, especially when dealing with {@link Restriction}. 
  * Note that {@link #getQueryString()} and {@link #getCountQueryString()} would 
  * (and should) produce <strong>parameterized query language</strong>. Every 
- * query parameter value could be retrieved by invoke {@link #getRestrictions()}.
+ * query parameter value could be retrieved by invoke {@link #getActualRestrictions()}.
  * </p>
  * 
  * @author xsalefter (xsalefter@gmail.com)
@@ -70,9 +70,9 @@ import java.util.Map;
  *   select person from Person person where person.name = :person_name_param_1 
  *   or person.name = :person_name_param_2
  *   
- *   of course we could use List<RestrictionMap> getRestrictions() instead of 
- *   Map<Integer, Restriction> getRestrictions(), but it's start another 
- *   complexity:
+ *   of course we could use List<RestrictionMap> getActualRestrictions() instead 
+ *   of Map<Integer, Restriction> getActualRestrictions(), but it's start 
+ *   another complexity:
  *   - Incompatible with (future) JDBC.
  *   - The key need to be generic, to minimize bug that could be appear when use
  *     Object as a key.
@@ -82,21 +82,19 @@ public interface QueryBuilder {
 	/**
 	 * <p>
 	 * Used to define fields to add to query. Optional call. If this method 
-	 * doesn't call explicitly, implementation class should produce default 
-	 * and valid query language.
+	 * doesn't call explicitly by client, implementation class should keep 
+	 * produce default and valid query language.
 	 * </p>
 	 * <p>
 	 * Example:
 	 * <pre>
 	 * QueryBuilder queryBuilder = new SomeQueryBuilderImpl(Person.class);
-	 * // Will produce 'select person from Person person'.
+	 * // Will produce 'select person from Person person' (JPA).
+	 * // Will produce 'select * from Person person' (JDBC).
 	 * queryBuiler.select();
 	 * 
 	 * // Will produce 'select person.name, person.age from Person'.
 	 * queryBuilder.select("name", "age");
-	 * 
-	 * // Will produce 'select person from Person person where person.age = :params'.
-	 * queryBuilder.where(new Restriction("age", RestrictionType.EQUAL, "20");
 	 * </pre>
 	 * </p> 
 	 * @param fields to select.
@@ -137,12 +135,12 @@ public interface QueryBuilder {
 	 * {@link RestrictionHandler.DTO#hasParameterizedQueryString()} is true.
 	 * </p>
 	 * <p>That this method should return read-only/unmodifiable {@link Map}. 
-	 * Thus, any modification to this method should throw 
+	 * Thus, any modification to this method would throw 
 	 * {@link UnsupportedOperationException} at runtime.</p>
 	 * 
 	 * @return {@link Collections#unmodifiableMap(Map)} of {@link Restriction}s.
 	 */
-	Map<Integer, Restriction> getRestrictions();
+	Map<Integer, Restriction> getActualRestrictions();
 
 	/**
 	 * Get parameterized query {@link String}. Invoke this method should clearing 
