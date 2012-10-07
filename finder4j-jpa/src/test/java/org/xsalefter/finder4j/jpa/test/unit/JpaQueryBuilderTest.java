@@ -36,8 +36,8 @@ public class JpaQueryBuilderTest {
 		QueryBuilder queryBuilder = new JpaQueryBuilder(Person.class);
 
 		Assert.assertNotNull(queryBuilder);
-		Assert.assertNotNull(queryBuilder.getRestrictions());
-		Assert.assertEquals(0, queryBuilder.getRestrictions().size());
+		Assert.assertNotNull(queryBuilder.getActualRestrictions());
+		Assert.assertEquals(0, queryBuilder.getActualRestrictions().size());
 		Assert.assertEquals(queryBuilder.getQueryString().trim(), "from Person");
 	}
 

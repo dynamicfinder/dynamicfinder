@@ -49,7 +49,7 @@ implements NullableRestrictionSpecs {
 				"person.birthDate != ?2";
 
 		Assert.assertEquals(expected, actual);
-		Assert.assertEquals(2, personQueryBuilder.getRestrictions().size());
+		Assert.assertEquals(2, personQueryBuilder.getActualRestrictions().size());
 	}
 
 
@@ -74,7 +74,7 @@ implements NullableRestrictionSpecs {
 				"Person person where person.name != ?1 or person.birthDate != ?2";
 
 		Assert.assertEquals(expected, actual);
-		Assert.assertEquals(2, personQueryBuilder.getRestrictions().size());
+		Assert.assertEquals(2, personQueryBuilder.getActualRestrictions().size());
 	}
 
 	@Test
@@ -98,7 +98,7 @@ implements NullableRestrictionSpecs {
 				"person.gender is null";
 
 		Assert.assertEquals(expected, actual);
-		Assert.assertEquals(1, personQueryBuilder.getRestrictions().size());
+		Assert.assertEquals(1, personQueryBuilder.getActualRestrictions().size());
 	}
 
 	@Test
@@ -123,7 +123,7 @@ implements NullableRestrictionSpecs {
 				"person.gender != ?2 or person.gender is null";
 
 		Assert.assertEquals(expected, actual);
-		Assert.assertEquals(2, personQueryBuilder.getRestrictions().size());
+		Assert.assertEquals(2, personQueryBuilder.getActualRestrictions().size());
 	}
 
 }
