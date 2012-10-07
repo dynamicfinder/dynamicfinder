@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.xsalefter.finder4j.RestrictionType;
 import org.xsalefter.finder4j.jpa.handler.EqualRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.GreaterRestrictionHandler;
-import org.xsalefter.finder4j.jpa.handler.GreaterThanRestrictionHandler;
+import org.xsalefter.finder4j.jpa.handler.GreaterEqualRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.LesserRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.LesserThanRestrictionHandler;
 import org.xsalefter.finder4j.jpa.handler.LikeRestrictionHandler;
@@ -27,7 +27,7 @@ public class JpaRestrictionHandlerFactory extends HashMap<RestrictionType, Restr
 		super.put(RestrictionType.EQUAL, new EqualRestrictionHandler(queryBuilder));
 		super.put(RestrictionType.NOT_EQUAL, new NotEqualRestrictionHandler(queryBuilder));
 		super.put(RestrictionType.GREATER, new GreaterRestrictionHandler(queryBuilder));
-		super.put(RestrictionType.GREATER_EQUAL, new GreaterThanRestrictionHandler(queryBuilder));
+		super.put(RestrictionType.GREATER_EQUAL, new GreaterEqualRestrictionHandler(queryBuilder));
 		super.put(RestrictionType.LESSER, new LesserRestrictionHandler(queryBuilder));
 		super.put(RestrictionType.LESSER_EQUAL, new LesserThanRestrictionHandler(queryBuilder));
 		super.put(RestrictionType.LIKE, new LikeRestrictionHandler(queryBuilder));

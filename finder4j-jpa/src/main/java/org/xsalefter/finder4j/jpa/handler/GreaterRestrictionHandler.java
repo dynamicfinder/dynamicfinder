@@ -8,7 +8,7 @@ import org.xsalefter.finder4j.spi.AbstractQueryBuilder;
 public class GreaterRestrictionHandler extends SimpleComparatorRestrictionHandler {
 
 	public GreaterRestrictionHandler(final AbstractQueryBuilder queryBuilder) {
-		super(queryBuilder, ">=");
+		super(queryBuilder, ">");
 	}
 
 }
