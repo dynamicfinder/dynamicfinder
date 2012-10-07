@@ -5,9 +5,9 @@ import org.xsalefter.finder4j.spi.AbstractQueryBuilder;
 /**
  * @author xsalefter (xsalefter@gmail.com)
  */
-public class LesserThanRestrictionHandler extends SimpleComparatorRestrictionHandler {
+public class LesserEqualRestrictionHandler extends SimpleComparatorRestrictionHandler {
 
-	public LesserThanRestrictionHandler(final AbstractQueryBuilder queryBuilder) {
+	public LesserEqualRestrictionHandler(final AbstractQueryBuilder queryBuilder) {
 		super(queryBuilder, "<=");
 	}
 
