@@ -28,13 +28,13 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 	private final StringBuilder countQueryStringBuilder;
 
 	private final Map<RestrictionType, RestrictionHandler> restrictionHandlers;
-	private final Map<Integer, Restriction> restrictions;
+	private final Map<Integer, Restriction> actualRestrictions;
 
 	public AbstractQueryBuilder() {
 		this.queryStringBuilder = new StringBuilder();
 		this.countQueryStringBuilder = new StringBuilder();
 		this.restrictionHandlers = new HashMap<RestrictionType, RestrictionHandler>();
-		this.restrictions = new HashMap<Integer, Restriction>();
+		this.actualRestrictions = new HashMap<Integer, Restriction>();
 	}
 
 	/**
@@ -45,13 +45,13 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 	public abstract String getEntityAliasName();
 
 	@Override
-	public final Map<Integer, Restriction> getRestrictions() {
-		return Collections.unmodifiableMap(this.restrictions);
+	public final Map<Integer, Restriction> getActualRestrictions() {
+		return Collections.unmodifiableMap(this.actualRestrictions);
 	}
 
 	/**
 	 * Add new restriction (<strong>not</strong> {@link Restriction} object) 
-	 * for used later in {@link #getRestrictions()}. This new restriction 
+	 * for used later in {@link #getActualRestrictions()}. This new restriction 
 	 * added when {@link RestrictionHandler.DTO#hasParameterizedQueryString()} 
 	 * is true.
 	 * @param key of restriction. Should be same value as parameter name 
@@ -59,16 +59,16 @@ public abstract class AbstractQueryBuilder implements QueryBuilder {
 	 * @param value value of restriction, to binding to parameterized query 
 	 *   string.
 	 */
-	protected final void addRestriction(final Integer id, final Restriction value) {
-		this.restrictions.put(id, value);
+	protected final void addActualRestriction(final Integer id, final Restriction value) {
+		this.actualRestrictions.put(id, value);
 	}
 
 	/**
 	 * Get restriction size.
 	 * @return restriction size.
 	 */
-	protected final int getRestrictionSize() {
-		return this.restrictions.size();
+	protected final int getActualRestrictionSize() {
+		return this.actualRestrictions.size();
 	}
 
 	/**
