@@ -5,7 +5,7 @@
 	<artifactId>dynamicfinder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Dynamic Finder</name>
-	<description>Simple library for dealing with finding and scrolling data across application layer in java.</description>
+	<description>Simple library for finding and scrolling data across application layer in java.</description>
 
 	<dependencies>
         <dependency>
