@@ -1,11 +1,12 @@
 package org.dynamicfinder.jpa;
 
 import java.beans.Introspector;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Entity;
 
 import org.dynamicfinder.Nullable;
 import org.dynamicfinder.Order;
@@ -277,12 +278,26 @@ public abstract class AbstractJpaQueryBuilder extends AbstractQueryBuilder {
 	}
 
 	private void createEntityAndAliasNameFromClass(Class<?> entityClass) {
-		if (entityClass.isAnnotationPresent(Entity.class) && 
-			!entityClass.getAnnotation(Entity.class).name().equals("")) 
-			this.entityName = entityClass.getAnnotation(Entity.class).name();
-		else 
-			this.entityName = entityClass.getSimpleName();
+		try {
+			@SuppressWarnings("unchecked")
+			final Class<? extends Annotation> entityAnnotation = 
+				(Class<? extends Annotation>) Class.forName("javax.persistence.Entity");
+			final Method nameMemberMethod = entityAnnotation.getDeclaredMethod("name");
+			this.entityName = (String) nameMemberMethod.invoke(entityAnnotation);
 
-		this.entityAliasName = Introspector.decapitalize(this.entityName);
+		} catch (Exception e) {
+			logger.debug(e.toString());
+			this.entityName = entityClass.getSimpleName();
+		} finally {
+			this.entityAliasName = Introspector.decapitalize(this.entityName);
+		}
+
+
+//		if (entityClass.isAnnotationPresent(Entity.class) && 
+//			!entityClass.getAnnotation(Entity.class).name().equals("")) 
+//			this.entityName = entityClass.getAnnotation(Entity.class).name();
+//		else 
+//			this.entityName = entityClass.getSimpleName();
+
 	}
 }
