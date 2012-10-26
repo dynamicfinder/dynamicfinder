@@ -6,6 +6,42 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Dynamic Finder</name>
 	<description>Simple library for finding and scrolling data across application layer in java.</description>
+    <url>https://github.com/dynamicfinder/dynamicfinder</url>
+
+    <licenses>
+        <license>
+            <name>Apache License</name>
+            <url>http://apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>xsalefter</id>
+            <name>xsalefter</name>
+            <email>xsalefter@gmail.com</email>
+            <url>https://github.com/xsalefter</url>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>dynamicfinder</name>
+        <url>https://github.com/dynamicfinder</url>
+    </organization>
+
+    <scm>
+        <url>https://github.com/dynamicfinder/dynamicfinder</url>
+        <connection>scm:git://github.com/dynamicfinder/dynamicfinder.git</connection>
+    </scm>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/dynamicfinder/dynamicfinder/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <url>https://dynamicfinder.ci.cloudbees.com</url>
+        <system>Jenkins</system>
+    </ciManagement>
 
 	<dependencies>
         <dependency>
@@ -14,14 +50,6 @@
             <version>1</version>
             <scope>compile</scope>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-        	<groupId>org.hibernate.javax.persistence</groupId>
-        	<artifactId>hibernate-jpa-2.0-api</artifactId>
-        	<version>1.0.1.Final</version>
-        	<scope>compile</scope>
-        	<optional>true</optional>
         </dependency>
 
         <dependency>
@@ -60,7 +88,14 @@
             <version>1.3.168</version>
             <scope>test</scope>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
