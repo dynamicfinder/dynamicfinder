@@ -28,6 +28,9 @@ public class JpaQueryBuilderSelectIntegrationTest extends AbstractJpaIntegration
 		this.queryBuilder = new JpaQueryBuilder(Employee.class);
 	}
 
+	/**
+	 * Test for {@link QueryBuilder#select()}.
+	 */
 	@Test
 	public void selectWithEmptyParameter() {
 		logger.debug("#selectWithEmptyParameter()");
@@ -43,6 +46,9 @@ public class JpaQueryBuilderSelectIntegrationTest extends AbstractJpaIntegration
 		
 	}
 
+	/**
+	 * Test for {@link QueryBuilder#select(String...)}.
+	 */
 	@Test
 	public void selectWithDefinedParameters() {
 		logger.debug("#selectWithDefinedParameter()");
@@ -62,4 +68,26 @@ public class JpaQueryBuilderSelectIntegrationTest extends AbstractJpaIntegration
 		Assert.assertEquals(200, result.size());
 	}
 
+
+	/**
+	 * Test for {@link QueryBuilder#select("name as personName", "address as address")}
+	 */
+	@Test
+	@org.junit.Ignore
+	public void selectWithAliasParameters() {
+		queryBuilder.select("firstName as firstName", "lastName as lastName");
+
+		String actual = queryBuilder.getQueryString();
+		String expected = "select employee.firstName as firstName, " +
+				"employee.lastName as lastName from Employee employee";
+		Assert.assertEquals(expected, actual);
+
+		super.entityManager.getTransaction().begin();
+		TypedQuery<Employee> query = super.entityManager.createQuery(actual, Employee.class);
+		Assert.assertNotNull(query);
+		List<Employee> result = query.getResultList();
+		super.entityManager.getTransaction().commit();
+
+		Assert.assertEquals(200, result.size());
+	}
 }
