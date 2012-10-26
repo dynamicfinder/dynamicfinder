@@ -5,7 +5,7 @@ package org.dynamicfinder.jpa.handler;
  */
 public class LikeWithPostfixRestrictionHandler extends LikeComparatorRestrictionHandler {
 
-	private static final String PREFIX = "'%',";
+	private static final String PREFIX = "'%', ";
 	private static final String POSTFIX = "";
 
 	public LikeWithPostfixRestrictionHandler() {
