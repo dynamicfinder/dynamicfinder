@@ -32,7 +32,7 @@ class LikeComparatorRestrictionHandler implements RestrictionHandler {
 		final StringBuilder builder = new StringBuilder();
 		final Nullable nullable = restriction.getNullable();
 
-		final String restrictionId = " ?" + restriction.getParameter();
+		final String restrictionId = "?" + restriction.getParameter();
 		final String fieldToRestrict = restriction.getField();
 		final String entityAndField = abstractQueryBuilder.getEntityAliasName() + 
 				"." + fieldToRestrict;
