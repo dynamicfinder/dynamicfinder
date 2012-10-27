@@ -291,9 +291,7 @@ public abstract class AbstractJpaQueryBuilder extends AbstractQueryBuilder {
 			} else {
 				this.entityName = entityClass.getSimpleName();
 			}
-
 		} catch (Exception e) {
-			logger.info(">>>>> {}", e.toString());
 			this.entityName = entityClass.getSimpleName();
 		} finally {
 			this.entityAliasName = Introspector.decapitalize(this.entityName);
