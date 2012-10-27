@@ -1,7 +1,9 @@
 package org.dynamicfinder.test.unit.jpa;
 
 import org.dynamicfinder.QueryBuilder;
+import org.dynamicfinder.jpa.AbstractJpaQueryBuilder;
 import org.dynamicfinder.jpa.JpaQueryBuilder;
+import org.dynamicfinder.test._entity.City;
 import org.dynamicfinder.test._entity.Person;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,4 +29,14 @@ public class JpaQueryBuilderTest {
 		Assert.assertEquals(queryBuilder.getQueryString().trim(), "select person from Person person");
 	}
 
+
+	/**
+	 * Test whether {@link AbstractJpaQueryBuilder#createEntityAndAliasNameFromClass(Class)} 
+	 * is ok.
+	 */
+	@Test
+	public void readNameMemberOnEntityTest() {
+		QueryBuilder queryBuilder = new JpaQueryBuilder(City.class);
+		Assert.assertEquals(queryBuilder.getQueryString(), "select cityEntity from CityEntity cityEntity");
+	}
 }
