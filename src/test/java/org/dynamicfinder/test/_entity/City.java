@@ -12,7 +12,7 @@ import javax.persistence.Table;
 /**
  * @author xsalefter (xsalefter[at]gmail.com)
  */
-@Entity
+@Entity(name="CityEntity")
 @Table(name="city")
 public class City implements Serializable {
 
