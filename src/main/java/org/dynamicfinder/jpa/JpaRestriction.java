@@ -129,4 +129,34 @@ public class JpaRestriction implements Restriction, Serializable {
 			   this.restrictionType.equals(RestrictionType.LIKE_WITH_POSTFIX) ||
 			   this.restrictionType.equals(RestrictionType.LIKE_WITH_PREFIX);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getField() == null) ? 0 : getField().hashCode());
+		result = prime * result
+				+ ((getNullable() == null) ? 0 : getNullable().hashCode());
+		result = prime
+				* result
+				+ ((getRestrictionLogic() == null) ? 0 : getRestrictionLogic().hashCode());
+		result = prime * result
+				+ ((getRestrictionType() == null) ? 0 : getRestrictionType().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+
+		if (!(obj instanceof JpaRestriction)) { return false; }
+
+		JpaRestriction other = (JpaRestriction) obj;
+
+		return 
+			this.getField().equals( other.getField() ) &&
+			this.getRestrictionType().equals( other.getRestrictionType() ) && 
+			this.getRestrictionLogic().equals( other.getRestrictionLogic() ) &&
+			this.getNullable().equals( other.getNullable() );
+	}
 }
