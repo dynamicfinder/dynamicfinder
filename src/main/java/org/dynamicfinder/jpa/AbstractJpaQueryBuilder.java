@@ -282,22 +282,22 @@ public abstract class AbstractJpaQueryBuilder extends AbstractQueryBuilder {
 			@SuppressWarnings("unchecked")
 			final Class<? extends Annotation> entityAnnotation = 
 				(Class<? extends Annotation>) Class.forName("javax.persistence.Entity");
+			Annotation entityAnnotationInstance = entityClass.getAnnotation(entityAnnotation);
 			final Method nameMemberMethod = entityAnnotation.getDeclaredMethod("name");
-			this.entityName = (String) nameMemberMethod.invoke(entityAnnotation);
+			final String localEntityName = (String) nameMemberMethod.invoke(entityAnnotationInstance);
+
+			if (!localEntityName.equals("")) {
+				this.entityName = localEntityName;
+			} else {
+				this.entityName = entityClass.getSimpleName();
+			}
 
 		} catch (Exception e) {
-			logger.debug(e.toString());
+			logger.info(">>>>> {}", e.toString());
 			this.entityName = entityClass.getSimpleName();
 		} finally {
 			this.entityAliasName = Introspector.decapitalize(this.entityName);
 		}
-
-
-//		if (entityClass.isAnnotationPresent(Entity.class) && 
-//			!entityClass.getAnnotation(Entity.class).name().equals("")) 
-//			this.entityName = entityClass.getAnnotation(Entity.class).name();
-//		else 
-//			this.entityName = entityClass.getSimpleName();
 
 	}
 }
