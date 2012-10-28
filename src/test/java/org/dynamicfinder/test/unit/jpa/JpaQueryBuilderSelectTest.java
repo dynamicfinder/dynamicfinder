@@ -37,7 +37,7 @@ public class JpaQueryBuilderSelectTest {
 		Assert.assertEquals(addressQueryBuilder.getQueryString(), "select address from Address address");
 
 		cityQueryBuilder.select();
-		Assert.assertEquals(cityQueryBuilder.getQueryString(), "select city from City city");
+		Assert.assertEquals(cityQueryBuilder.getQueryString(), "select cityEntity from CityEntity cityEntity");
 	}
 
 	@Test
