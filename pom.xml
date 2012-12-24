@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.dynamicfinder</groupId>
 	<artifactId>dynamicfinder</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>Dynamic Finder</name>
 	<description>Simple library for finding and scrolling data across application layer in java.</description>
     <url>https://github.com/dynamicfinder/dynamicfinder</url>
