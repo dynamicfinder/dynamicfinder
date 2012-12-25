@@ -47,6 +47,9 @@ public class JpaQueryBuilderWithLikeWithPrefixRestrictionTest extends AbstractJp
 		TypedQuery<Long> countQuery = super.entityManager.createQuery(queryBuilder.getCountQueryString(), Long.class);
 		Map<Integer, Restriction> actualRestriction = queryBuilder.getActualRestrictions();
 
+		// FIXME: LOOK AT THIS RESULT. New implementation make this WRONG!
+		logger.info(">>> actualRestriction size:{}", actualRestriction.size());
+
 		for (Integer parameter : actualRestriction.keySet()) {
 			query.setParameter(parameter, actualRestriction.get(parameter).getValue());
 			countQuery.setParameter(parameter, actualRestriction.get(parameter).getValue());
