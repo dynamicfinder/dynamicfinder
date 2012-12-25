@@ -14,6 +14,7 @@ import org.dynamicfinder.QueryBuilder;
 import org.dynamicfinder.Restriction;
 import org.dynamicfinder.RestrictionType;
 import org.dynamicfinder.spi.AbstractQueryBuilder;
+import org.dynamicfinder.spi.AbstractRestriction;
 import org.dynamicfinder.spi.RestrictionHandler;
 
 /**
@@ -98,7 +99,12 @@ public abstract class AbstractJpaQueryBuilder extends AbstractQueryBuilder {
 		final int restrictionSize = restrictions.size();
 
 		for (int i = 0; i < restrictions.size(); i++) {
-			final Restriction restriction = restrictions.get(i);
+			final Restriction r = restrictions.get(i);
+
+			if (!(r instanceof AbstractRestriction)) 
+				throw new IllegalArgumentException("Passed Restriction should be instance of org.dynamicfinder.spi.AbstractRestriction");
+
+			final AbstractRestriction restriction = (AbstractRestriction) r;
 			restriction.setParameter(super.getActualRestrictionSize() + 1); // Any better idea than this??
 
 			final RestrictionType restrictionType = restriction.getRestrictionType();
