@@ -15,13 +15,6 @@ public interface Restriction extends Serializable {
 	Integer getParameter();
 
 	/**
-	 * Set {@link Restriction} parameter. Implementation should make sure that 
-	 * this id only created if the {@link #getParameter()} is null.
-	 * @param parameter to set.
-	 */
-	void setParameter(Integer parameter);
-
-	/**
 	 * Get field name.
 	 * @return {@link String} name.
 	 */

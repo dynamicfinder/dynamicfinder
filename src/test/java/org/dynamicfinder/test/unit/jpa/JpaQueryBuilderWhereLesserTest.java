@@ -161,7 +161,8 @@ implements NullableAndRestrictionLogicSpecs {
 
 	/**
 	 * Should throw {@link UnsupportedOperationException} because add null value 
-	 * to {@link Restriction} with {@link Nullable#KEEP}.
+	 * to {@link Restriction} with {@link RestrictionType#LESSER} and 
+	 * {@link Nullable#KEEP}.
 	 */
 	@Test
 	public void nullableKeepThrowException() {
@@ -174,8 +175,10 @@ implements NullableAndRestrictionLogicSpecs {
 		restrictions.add(new JpaRestriction("name", RestrictionType.LESSER, Nullable.KEEP, RestrictionLogic.OR));
 		restrictions.add(new JpaRestriction("hobby", RestrictionType.LESSER, Nullable.KEEP));
 
-		// this will throw an exception, which is come from RestrictionHandler.
 		personQueryBuilder.where(restrictions);
+		/** This will throw an exception, which is come from RestrictionHandler. 
+		    Just calling where is not working because we change the implementation. */
+		personQueryBuilder.getQueryString();
 	}
 
 

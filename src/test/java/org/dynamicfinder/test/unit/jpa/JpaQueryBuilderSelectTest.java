@@ -51,7 +51,7 @@ public class JpaQueryBuilderSelectTest {
 
 		personQueryBuilder.select("addresses");
 		actual = personQueryBuilder.getQueryString();
-		expected = "select person.addresses from Person person";
+		expected = "select person.id, person.name, person.addresses from Person person";
 		Assert.assertEquals(expected, actual);
 	}
 
