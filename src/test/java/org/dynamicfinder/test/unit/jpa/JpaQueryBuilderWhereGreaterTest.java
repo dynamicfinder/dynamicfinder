@@ -174,8 +174,10 @@ implements NullableAndRestrictionLogicSpecs {
 		restrictions.add(new JpaRestriction("name", RestrictionType.GREATER, Nullable.KEEP, RestrictionLogic.OR));
 		restrictions.add(new JpaRestriction("hobby", RestrictionType.GREATER, Nullable.KEEP));
 
-		// this will throw an exception, which is come from RestrictionHandler.
 		personQueryBuilder.where(restrictions);
+		/** This will throw an exception, which is come from RestrictionHandler. 
+	        Just calling where is not working because we change the implementation. */
+		personQueryBuilder.getQueryString();
 	}
 
 
