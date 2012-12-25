@@ -37,6 +37,16 @@ public class JpaQueryBuilderTest {
 	@Test
 	public void readNameMemberOnEntityTest() {
 		QueryBuilder queryBuilder = new JpaQueryBuilder(City.class);
-		Assert.assertEquals(queryBuilder.getQueryString(), "select cityEntity from CityEntity cityEntity");
+		Assert.assertEquals("select cityEntity from CityEntity cityEntity", queryBuilder.getQueryString());
+	}
+
+
+	@Test
+	public void readNameMemberOnEntityForGetCountQueryStringTest() {
+		QueryBuilder queryBuilder = new JpaQueryBuilder(City.class);
+		Assert.assertEquals(
+				"select count(cityEntity) from CityEntity cityEntity",
+				queryBuilder.getCountQueryString()
+		);
 	}
 }

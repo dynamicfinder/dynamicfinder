@@ -3,19 +3,18 @@ package org.dynamicfinder.jpa;
 import java.io.Serializable;
 
 import org.dynamicfinder.Nullable;
-import org.dynamicfinder.Restriction;
 import org.dynamicfinder.RestrictionLogic;
 import org.dynamicfinder.RestrictionType;
+import org.dynamicfinder.spi.AbstractRestriction;
 
 /**
  * Define data structure for query restriction for Java Persistence API.
  * @author xsalefter (xsalefter[at]gmail.com)
  */
-public class JpaRestriction implements Restriction, Serializable {
+public class JpaRestriction extends AbstractRestriction implements Serializable {
 
 	private static final long serialVersionUID = 1238053379229080782L;
 
-	private Integer parameter;
 	private final String field;
 	private final RestrictionType restrictionType;
 	private final Object value;
@@ -83,15 +82,6 @@ public class JpaRestriction implements Restriction, Serializable {
 		this.value = values;
 		this.nullable = nullable;
 		this.restrictionLogic = restrictionLogic;
-	}
-
-	public final Integer getParameter() {
-		return parameter;
-	}
-
-	public void setParameter(Integer parameter) {
-		if (this.getParameter()  == null)
-			this.parameter = parameter;
 	}
 
 	public final String getField() {
